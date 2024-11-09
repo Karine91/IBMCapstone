@@ -1,0 +1,15 @@
+.root-wrapper {
+  height: 100vh;
+  background-image: url(../assets/bg.jpg);
+  background-size: cover;
+  background-position: center center;
+  display: flex;
+
+  flex-direction: column;
+}
+
+.main {
+  flex-grow: 1;
+  padding: 20px;
+  box-sizing: border-box;
+}

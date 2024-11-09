@@ -1,0 +1,13 @@
+.hero {
+  position: absolute;
+  bottom: 20px;
+  font-size: 1.2rem;
+  color: white;
+  line-height: 1.1;
+  padding: 20px;
+
+  span {
+    color: var(--primary-500);
+    margin-left: 1em;
+  }
+}
