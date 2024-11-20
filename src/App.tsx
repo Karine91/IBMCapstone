@@ -1,6 +1,6 @@
 import AuthRoot from "./routes/authRoot";
 import Home from "./components/Home/Home";
-import SignUpForm from "./components/SignUp/SignUpForm";
+import SignUp from "./components/SignUp/SignUp";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 const router = createBrowserRouter([
@@ -17,7 +17,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/signup",
-        element: <SignUpForm />,
+        element: <SignUp />,
       },
     ],
   },
