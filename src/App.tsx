@@ -1,6 +1,10 @@
-import AuthRoot from "./routes/authRoot";
+import AuthRoot from "./layouts/authRoot";
+import MainRoot from "./layouts/MainRoot";
 import Home from "./components/Home/Home";
 import SignUp from "./components/SignUp/SignUp";
+import Login from "./components/Login/Login";
+import InstantConsultation from "./InstantConsultationBooking/InstantConsultation";
+
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 const router = createBrowserRouter([
@@ -13,11 +17,20 @@ const router = createBrowserRouter([
       },
       {
         path: "/login",
-        element: <Home />,
+        element: <Login />,
       },
       {
         path: "/signup",
         element: <SignUp />,
+      },
+    ],
+  },
+  {
+    element: <MainRoot />,
+    children: [
+      {
+        path: "/instant-consultation",
+        element: <InstantConsultation />,
       },
     ],
   },

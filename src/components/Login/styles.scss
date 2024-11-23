@@ -1,0 +1,19 @@
+.login .form {
+  padding-bottom: 10px;
+}
+
+.forgot-pass {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+.forgot-pass-link {
+  color: var(--text);
+  transition: color ease 0.3s;
+
+  &:hover {
+    color: var(--primary-800);
+  }
+}

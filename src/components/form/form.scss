@@ -1,4 +1,4 @@
-.sign-up-form-wrapper {
+.form-wrapper {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -28,6 +28,9 @@
   .header-secondary .link {
     color: #286c7e;
     font-weight: 500;
+    &:hover {
+      color: var(--primary-700);
+    }
   }
 
   .btn-group {

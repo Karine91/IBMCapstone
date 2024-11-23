@@ -3,7 +3,6 @@
   line-height: 1.5;
   font-weight: 400;
 
-  background-color: #242424;
   font-size: 1rem;
   color: #242424;
 
@@ -13,15 +12,21 @@
   -moz-osx-font-smoothing: grayscale;
 
   --primary-500: #49c5e5;
+  --primary-300: #85d8ee;
   --red: #f34147;
   --darkRed: hsl(358 88% 49% / 1);
   --primary-800: #286c7e;
   --primary-700: #348ca3;
+  --primary-50: #edf9fc;
   --text: #333;
   --neutral-dark: #b4b4b4;
   --neutral-light: #f0f0f0;
   --neutral-darker: #545454;
   --black: #000;
+}
+
+* {
+  box-sizing: border-box;
 }
 
 a {
@@ -42,8 +47,15 @@ button:hover {
   cursor: pointer;
 }
 
-body {
+body,
+html {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+  height: 100%;
+  width: 100%;
+}
+
+#root {
+  width: 100%;
 }

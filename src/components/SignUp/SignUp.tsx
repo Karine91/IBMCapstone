@@ -1,7 +1,8 @@
 import { useForm, SubmitHandler } from "react-hook-form";
-import "./Sing_Up.scss";
+import "../form/form.scss";
 import InputField from "../form/InputField";
 import { validation } from "../form/validation";
+import { Link } from "react-router-dom";
 
 type Inputs = {
   role: string;
@@ -22,15 +23,15 @@ const SignUp = () => {
 
   const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
   return (
-    <div className="sign-up-form-wrapper">
+    <div className="form-wrapper">
       <form className="form" onSubmit={handleSubmit(onSubmit)}>
         <div className="header">
           <div>Sign Up</div>
           <div className="header-secondary">
             Already a member?{" "}
-            <a className="link" href="/login">
+            <Link className="link" to="/login">
               Login
-            </a>
+            </Link>
           </div>
         </div>
         <div>
