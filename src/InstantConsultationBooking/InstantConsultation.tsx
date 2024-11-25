@@ -6,7 +6,7 @@ import DoctorCardIC from "./DoctorCardIC/DoctorCardIC";
 import { IDoctor } from "./types";
 
 const InstantConsultation = () => {
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [doctors, setDoctors] = useState<IDoctor[]>([]);
   const [searchText, setSearchText] = useState("");
 
@@ -15,7 +15,9 @@ const InstantConsultation = () => {
     speciality || searchText
       ? doctors.filter((doctor) => {
           const specialityFilter = speciality
-            ? doctor.speciality.toLowerCase() === speciality.toLowerCase()
+            ? speciality
+                .toLocaleLowerCase()
+                .includes(doctor.speciality.toLowerCase())
             : true;
           const searchFilter = searchText
             ? doctor.name.toLowerCase().includes(searchText.toLowerCase())
@@ -44,11 +46,22 @@ const InstantConsultation = () => {
     // }
   }, [searchParams]);
 
+  const handleSetSpeciality = (speciality: string) => {
+    // const specialityParam = searchParams.get("speciality");
+    // setSearchParams({
+    //   speciality: [...(specialityParam?.split(",") || []), speciality].join(
+    //     ","
+    //   ),
+    // });
+    setSearchParams({ speciality });
+  };
+
   return (
     <center>
       <div className="searchpage-container">
         <FindDoctorSearchIC
           speciality={searchParams.get("speciality") || ""}
+          setSpeciality={handleSetSpeciality}
           onSearch={handleSearch}
         />
         <div className="search-results-container">

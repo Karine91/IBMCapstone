@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "./FindDoctorSearchIC.scss";
-import { useNavigate } from "react-router-dom";
 import findDocImg from "../../assets/find-doc-bg.png";
+import { IoMdClose } from "react-icons/io";
 import { FaSearch } from "react-icons/fa";
 
 const initSpeciality = [
@@ -15,32 +15,61 @@ const initSpeciality = [
 ];
 
 const FindDoctorSearchIC = ({
-  speciality: searchDoctor,
+  speciality: specialitiesSelected,
   onSearch,
+  setSpeciality,
 }: {
   speciality: string;
   onSearch: (str: string) => void;
+  setSpeciality: (val: string) => void;
 }) => {
   const [doctorResultHidden, setDoctorResultHidden] = useState(true);
-  const [search, setSearch] = useState(searchDoctor);
+  const [search, setSearch] = useState("");
   const [specialities] = useState(initSpeciality);
-  const navigate = useNavigate();
 
-  const handleDoctorSelect = (speciality: string) => {
+  const filteredSpeicialities = specialities.filter(
+    (item) =>
+      !specialitiesSelected.toLocaleLowerCase().includes(item.toLowerCase())
+  );
+
+  const specialitiesSelectedList = specialitiesSelected
+    ? specialitiesSelected.split(",")
+    : [];
+
+  const handleDoctorSelect = (specialityNewValue: string) => {
     setDoctorResultHidden(true);
-    navigate(`/instant-consultation?speciality=${speciality}`);
+
+    setSpeciality([...specialitiesSelectedList, specialityNewValue].join(","));
+  };
+
+  const removeSpeciality = (sp: string) => {
+    const filtered = specialitiesSelectedList.filter(
+      (item) => item.toLowerCase() !== sp.toLowerCase()
+    );
+    setSpeciality(filtered.join(","));
   };
 
   return (
     <div className="finddoctor">
       <center>
         <h1>Find a doctor and Consult instantly</h1>
-        <div hidden={!!searchDoctor} className="find-doc-img-wrapper">
+        <div hidden={!!specialitiesSelected} className="find-doc-img-wrapper">
           <img className="find-doc-img" src={findDocImg} alt="Find a doctor" />
         </div>
         <div className="home-search-container">
           <div className="doctor-search-box">
             <div className="search-bar">
+              {specialitiesSelectedList.map((item) => (
+                <div
+                  key={item}
+                  className="specialities-item"
+                  onClick={() => removeSpeciality(item)}
+                >
+                  <span>{item}</span>
+                  <IoMdClose className="close-icon" />
+                </div>
+              ))}
+
               <input
                 type="text"
                 className="search-doctor-input"
@@ -58,10 +87,10 @@ const FindDoctorSearchIC = ({
 
             <div
               className="search-doctor-input-results"
-              hidden={doctorResultHidden}
+              hidden={doctorResultHidden || !filteredSpeicialities.length}
             >
               <div className="results-content">
-                {specialities.map((speciality) => (
+                {filteredSpeicialities.map((speciality) => (
                   <div
                     className="search-doctor-result-item"
                     key={speciality}
