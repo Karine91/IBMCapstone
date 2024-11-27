@@ -5,3 +5,9 @@ export interface IDoctor {
   speciality: string;
   profilePic?: string;
 }
+
+export interface Appointment {
+  name: string;
+  phoneNumber: string;
+  id: string;
+}

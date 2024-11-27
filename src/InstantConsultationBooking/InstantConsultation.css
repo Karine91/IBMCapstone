@@ -17,3 +17,14 @@
   text-align: left;
   font-size: 15px;
 }
+
+.search-results {
+  display: flex;
+  flex-direction: column;
+}
+
+.doctor-results-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}

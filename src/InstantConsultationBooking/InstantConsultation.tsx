@@ -47,12 +47,6 @@ const InstantConsultation = () => {
   }, [searchParams]);
 
   const handleSetSpeciality = (speciality: string) => {
-    // const specialityParam = searchParams.get("speciality");
-    // setSearchParams({
-    //   speciality: [...(specialityParam?.split(",") || []), speciality].join(
-    //     ","
-    //   ),
-    // });
     setSearchParams({ speciality });
   };
 
@@ -66,7 +60,7 @@ const InstantConsultation = () => {
         />
         <div className="search-results-container">
           {searchText || speciality ? (
-            <center>
+            <div className="search-results">
               <h2>
                 {filteredDoctors.length} doctors are available{" "}
                 {searchParams.get("location")}
@@ -75,18 +69,21 @@ const InstantConsultation = () => {
                 Book appointments with minimum wait-time & verified doctor
                 details
               </h3>
+
               {filteredDoctors.length > 0 ? (
-                filteredDoctors.map((doctor) => (
-                  <DoctorCardIC
-                    className="doctorcard"
-                    {...doctor}
-                    key={doctor.name}
-                  />
-                ))
+                <div className="doctor-results-container">
+                  {filteredDoctors.map((doctor) => (
+                    <DoctorCardIC
+                      className="doctorcard"
+                      {...doctor}
+                      key={doctor.name}
+                    />
+                  ))}
+                </div>
               ) : (
                 <p>No doctors found.</p>
               )}
-            </center>
+            </div>
           ) : (
             ""
           )}

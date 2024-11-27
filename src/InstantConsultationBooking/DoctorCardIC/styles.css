@@ -1,0 +1,52 @@
+.doctor-card-details-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.doctor-card-profile-image-container {
+  width: 110px;
+  height: 130px;
+  margin-bottom: 10px;
+}
+
+.doctor-card-profile-image-container img {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+}
+
+.doctor-card-details {
+  text-align: center;
+}
+
+.doctor-card-detail-name {
+  font-size: 16px;
+  line-height: 1;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.doctor-card-detail-speciality {
+  font-size: 12px;
+  color: var(--neutral-darker);
+  margin-bottom: 5px;
+}
+
+.doctor-card-detail-experience {
+  font-size: 12px;
+  color: var(--neutral-dark);
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.doctor-card-detail-location,
+.doctor-card-detail-clinic,
+.doctor-card-detail-consultationfees {
+  font-size: 12px;
+  margin-bottom: 5px;
+}
+.doctor-card-detail-consultationfees {
+  font-weight: bold;
+}
