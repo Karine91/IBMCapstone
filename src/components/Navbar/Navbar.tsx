@@ -15,7 +15,7 @@ const Navbar = ({ variant = "dark" }: { variant: "dark" | "light" }) => {
             <Link to="/">Home</Link>
           </li>
           <li className="nav-link">
-            <Link to="/appointments">Appointments</Link>
+            <Link to="/instant-consultation">Appointments</Link>
           </li>
           <li className="nav-link">
             <Link to="#">Health Blog</Link>

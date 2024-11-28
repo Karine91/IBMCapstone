@@ -1,7 +1,7 @@
 import { IDoctor } from "../types";
 import DocPlaceholderImg from "../../assets/doc-placeholder.png";
 
-import "./styles.css";
+import "./detailsStyles.css";
 
 const DoctorDetails = ({
   profilePic,

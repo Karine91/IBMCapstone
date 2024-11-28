@@ -106,11 +106,7 @@ const AppointmentModal = ({
       {appointments.length > 0 ? (
         <AppointmentsList appointments={appointments} handleCancel={onCancel} />
       ) : (
-        <AppointmentFormIC
-          doctorName={doctor.name}
-          doctorSpeciality={doctor.speciality}
-          onSubmit={onSubmit}
-        />
+        <AppointmentFormIC onSubmit={onSubmit} />
       )}
     </div>
   );
