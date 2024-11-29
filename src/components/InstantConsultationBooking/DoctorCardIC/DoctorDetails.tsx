@@ -1,5 +1,5 @@
 import { IDoctor } from "../types";
-import DocPlaceholderImg from "../../assets/doc-placeholder.png";
+import DocPlaceholderImg from "../../../assets/doc-placeholder.png";
 
 import "./detailsStyles.css";
 

@@ -18,6 +18,12 @@ const AppointmentsList = ({
           <p>
             <span>Phone Number:</span> {appointment.phoneNumber}
           </p>
+          <p>
+            <span>Date of Appointment:</span> {appointment.date}
+          </p>
+          <p>
+            <span>Time Slot:</span> {appointment.time.label}
+          </p>
           <button
             className="cancel-appointment-btn"
             onClick={() => handleCancel(appointment.id)}

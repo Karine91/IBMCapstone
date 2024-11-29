@@ -1,18 +1,24 @@
 import { useForm } from "react-hook-form";
-import InputField from "../../components/form/InputField";
-import { validation } from "../../components/form/validation";
+import InputField from "../../form/InputField";
+import { validation } from "../../form/validation";
 import "./style.scss";
+import Select from "../../form/Select";
+import FormField from "../../form/FormField";
+import { SelectOptions } from "../types";
 
-type Inputs = {
+export type Inputs = {
   name: string;
   phoneNumber: string;
+  date: string;
+  time: string;
 };
 
 interface IProps {
   onSubmit: (data: Inputs) => void;
+  timeSlots: SelectOptions[];
 }
 
-const AppointmentFormIC = ({ onSubmit }: IProps) => {
+const AppointmentFormIC = ({ onSubmit, timeSlots }: IProps) => {
   const {
     register,
     handleSubmit,
@@ -36,6 +42,24 @@ const AppointmentFormIC = ({ onSubmit }: IProps) => {
         placeholder="Enter your phone"
         error={errors.phoneNumber}
       />
+      <InputField
+        register={register("date", { required })}
+        label="Date of Appointment"
+        type="date"
+        error={errors.date}
+      />
+
+      <FormField label="Book Time Slot:" error={errors.time}>
+        {(id) => (
+          <Select
+            id={id}
+            register={register("time", { required })}
+            options={timeSlots}
+            noValueMessage="Select a time slot"
+          />
+        )}
+      </FormField>
+
       <button className="book-appointment" type="submit">
         Book Now
       </button>

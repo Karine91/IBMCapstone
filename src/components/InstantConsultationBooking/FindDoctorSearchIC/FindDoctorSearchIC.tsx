@@ -1,6 +1,6 @@
 import { useState } from "react";
 import "./FindDoctorSearchIC.scss";
-import findDocImg from "../../assets/find-doc-bg.png";
+import findDocImg from "../../../assets/find-doc-bg.png";
 import { IoMdClose } from "react-icons/io";
 import { FaSearch } from "react-icons/fa";
 

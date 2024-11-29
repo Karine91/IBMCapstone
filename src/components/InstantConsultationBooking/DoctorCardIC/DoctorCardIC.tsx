@@ -1,10 +1,12 @@
-import React, { ReactNode, useEffect, useState } from "react";
+import React, { useState } from "react";
 import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
 import "./DoctorCardIC.scss";
-import AppointmentFormIC from "../AppointmentFormIC/AppointmentFormIC";
+import AppointmentFormIC, {
+  Inputs,
+} from "../AppointmentFormIC/AppointmentFormIC";
 import { v4 as uuidv4 } from "uuid";
-import { IDoctor, Appointment } from "../types";
+import { IDoctor, Appointment, SelectOptions } from "../types";
 import DoctorDetails from "./DoctorDetails";
 import AppointmentsList from "./AppointmentsList";
 import { MdClose } from "react-icons/md";
@@ -17,10 +19,16 @@ interface IProps extends IDoctor {
 const DoctorCardIC = ({ className, ...doctorDetails }: IProps) => {
   const [showModal, setShowModal] = useState(false);
   const [appointments, setAppointments] = useState<Appointment[]>([]);
+  const [timeSlots] = React.useState([
+    { value: 9, label: "9:00 - 10:00" },
+    { value: 10, label: "10:00 - 11:00" },
+    { value: 11, label: "11:00 - 12:00" },
+    { value: 12, label: "12:00 - 13:00" },
+  ]);
 
-  const handleBooking = () => {
-    setShowModal(true);
-  };
+  // const handleBooking = () => {
+  //   setShowModal(true);
+  // };
 
   const handleCancel = (appointmentId: string) => {
     const updatedAppointments = appointments.filter(
@@ -29,11 +37,13 @@ const DoctorCardIC = ({ className, ...doctorDetails }: IProps) => {
     setAppointments(updatedAppointments);
   };
 
-  const handleFormSubmit = (appointmentData: Omit<Appointment, "id">) => {
+  const handleFormSubmit = ({ time, ...appointmentData }: Inputs) => {
     const newAppointment: Appointment = {
       id: uuidv4(),
+      time: timeSlots.find((item) => item.value === Number(time))!,
       ...appointmentData,
     };
+    console.log(newAppointment);
     const updatedAppointments = [...appointments, newAppointment];
     setAppointments(updatedAppointments);
     setShowModal(false);
@@ -62,10 +72,12 @@ const DoctorCardIC = ({ className, ...doctorDetails }: IProps) => {
           open={showModal}
           onClose={() => setShowModal(false)}
         >
+          {/* @ts-expect-error wrong type*/}
           {(close) => {
             return (
               <AppointmentModal
                 appointments={appointments}
+                timeSlots={timeSlots}
                 doctor={doctorDetails}
                 onCancel={handleCancel}
                 onSubmit={handleFormSubmit}
@@ -85,12 +97,14 @@ const AppointmentModal = ({
   onSubmit,
   onCancel,
   onClose,
+  timeSlots,
 }: {
   appointments: Appointment[];
   doctor: IDoctor;
-  onSubmit: (appointmentData: Omit<Appointment, "id">) => void;
+  onSubmit: (appointmentData: Inputs) => void;
   onCancel: (id: string) => void;
   onClose: () => void;
+  timeSlots: SelectOptions[];
 }) => {
   return (
     <div className="doctorbg">
@@ -106,7 +120,7 @@ const AppointmentModal = ({
       {appointments.length > 0 ? (
         <AppointmentsList appointments={appointments} handleCancel={onCancel} />
       ) : (
-        <AppointmentFormIC onSubmit={onSubmit} />
+        <AppointmentFormIC onSubmit={onSubmit} timeSlots={timeSlots} />
       )}
     </div>
   );
