@@ -5,6 +5,7 @@ import "../form/form.scss";
 import InputField from "../form/InputField";
 import { validation } from "../form/validation";
 import { Link } from "react-router-dom";
+import { API_URL } from "../../config";
 
 type Inputs = {
   role: string;
@@ -16,7 +17,7 @@ type Inputs = {
 
 const SignUp = () => {
   const navigate = useNavigate();
-  const [showerr, setShowerr] = useState("");
+  const [showErr, setShowErr] = useState<string[]>([]);
 
   const {
     register,
@@ -41,23 +42,27 @@ const SignUp = () => {
       }),
     });
 
-    const json = await response.json(); // Parse the response JSON
-    if (json.authtoken) {
-      // Store user data in session storage
-      sessionStorage.setItem("auth-token", json.authtoken);
-      sessionStorage.setItem("name", name);
-      sessionStorage.setItem("phone", phone);
-      sessionStorage.setItem("email", email);
-      // Redirect user to home page
-      navigate("/");
-      window.location.reload(); // Refresh the page
-    } else {
-      if (json.errors) {
-        for (const error of json.errors) {
-          setShowerr(error.msg); // Show error messages
+    try {
+      const json = await response.json(); // Parse the response JSON
+      if (json.authtoken) {
+        // Store user data in session storage
+        sessionStorage.setItem("auth-token", json.authtoken);
+        sessionStorage.setItem("name", name);
+        sessionStorage.setItem("phone", phone);
+        sessionStorage.setItem("email", email);
+        // Redirect user to home page
+        navigate("/");
+        window.location.reload(); // Refresh the page
+      }
+    } catch (error: any) {
+      if (error.error) {
+        if (Array.isArray(error.error)) {
+          setShowErr(error.error);
+        } else {
+          setShowErr([error.error]);
         }
       } else {
-        setShowerr(json.error);
+        setShowErr(error.toString());
       }
     }
   };
@@ -120,6 +125,9 @@ const SignUp = () => {
             Reset
           </button>
         </div>
+        {showErr.map((err) => (
+          <div className="error-text">{err}</div>
+        ))}
       </form>
     </div>
   );
