@@ -2,7 +2,7 @@ import "./Navbar.scss";
 import { RiHeartPulseLine } from "react-icons/ri";
 import { Link } from "react-router-dom";
 
-const Navbar = ({ variant = "dark" }: { variant: "dark" | "light" }) => {
+const Navbar = ({ variant = "dark" }: { variant?: "dark" | "light" }) => {
   return (
     <nav data-variant={variant} className="navbar">
       <a href="/" className="logo">
