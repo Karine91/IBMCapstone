@@ -1,4 +1,6 @@
 import { useForm, SubmitHandler } from "react-hook-form";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "../form/form.scss";
 import InputField from "../form/InputField";
 import { validation } from "../form/validation";
@@ -13,6 +15,9 @@ type Inputs = {
 };
 
 const SignUp = () => {
+  const navigate = useNavigate();
+  const [showerr, setShowerr] = useState("");
+
   const {
     register,
     handleSubmit,
@@ -21,7 +26,41 @@ const SignUp = () => {
 
   const { required } = validation;
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    const { name, email, phone, password } = data;
+    const response = await fetch(`${API_URL}/api/auth/register`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name,
+        email,
+        password,
+        phone,
+      }),
+    });
+
+    const json = await response.json(); // Parse the response JSON
+    if (json.authtoken) {
+      // Store user data in session storage
+      sessionStorage.setItem("auth-token", json.authtoken);
+      sessionStorage.setItem("name", name);
+      sessionStorage.setItem("phone", phone);
+      sessionStorage.setItem("email", email);
+      // Redirect user to home page
+      navigate("/");
+      window.location.reload(); // Refresh the page
+    } else {
+      if (json.errors) {
+        for (const error of json.errors) {
+          setShowerr(error.msg); // Show error messages
+        }
+      } else {
+        setShowerr(json.error);
+      }
+    }
+  };
   return (
     <div className="form-wrapper">
       <form className="form" onSubmit={handleSubmit(onSubmit)}>
