@@ -1,4 +1,3 @@
-import "./style.scss";
 import { FieldError, UseFormRegisterReturn } from "react-hook-form";
 import { ComponentProps } from "react";
 

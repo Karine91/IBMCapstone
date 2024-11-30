@@ -1,5 +1,6 @@
 import React from "react";
 import { UseFormRegisterReturn } from "react-hook-form";
+import { IoIosArrowDown } from "react-icons/io";
 
 const Select = ({
   options,
@@ -13,14 +14,19 @@ const Select = ({
   register: UseFormRegisterReturn;
 } & React.ComponentProps<"select">) => {
   return (
-    <select id={id} {...register} {...props}>
-      <option value="">{noValueMessage}</option>
-      {options.map((item) => (
-        <option key={item.value} value={item.value}>
-          {item.label}
+    <div className="select-wrapper">
+      <select className="select" id={id} {...register} {...props}>
+        <option className="select-item" value="">
+          {noValueMessage}
         </option>
-      ))}
-    </select>
+        {options.map((item) => (
+          <option className="select-item" key={item.value} value={item.value}>
+            {item.label}
+          </option>
+        ))}
+      </select>
+      <IoIosArrowDown className="arrow-down" />
+    </div>
   );
 };
 

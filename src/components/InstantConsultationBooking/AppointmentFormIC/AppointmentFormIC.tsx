@@ -26,6 +26,11 @@ const AppointmentFormIC = ({ onSubmit, timeSlots }: IProps) => {
   } = useForm<Inputs>({ mode: "onBlur" });
   const { required } = validation;
 
+  const getCurrentDate = () => {
+    const date = new Date();
+    return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+  };
+
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="appointment-form">
       <InputField
@@ -45,6 +50,8 @@ const AppointmentFormIC = ({ onSubmit, timeSlots }: IProps) => {
       <InputField
         register={register("date", { required })}
         label="Date of Appointment"
+        //@ts-expect-error type
+        min={getCurrentDate()}
         type="date"
         error={errors.date}
       />

@@ -27,3 +27,26 @@
   color: var(--darkRed);
   font-size: 14px;
 }
+
+.select {
+  padding: 15px;
+  padding-right: 45px;
+  border-radius: 15px;
+  font-size: 16px;
+  appearance: none;
+  width: 100%;
+  background-color: white;
+  border: 1px solid #b4b4b4;
+}
+
+.select-wrapper {
+  position: relative;
+
+  .arrow-down {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    right: 15px;
+  }
+}

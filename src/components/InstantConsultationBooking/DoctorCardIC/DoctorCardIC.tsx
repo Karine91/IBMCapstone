@@ -26,15 +26,12 @@ const DoctorCardIC = ({ className, ...doctorDetails }: IProps) => {
     { value: 12, label: "12:00 - 13:00" },
   ]);
 
-  // const handleBooking = () => {
-  //   setShowModal(true);
-  // };
-
   const handleCancel = (appointmentId: string) => {
     const updatedAppointments = appointments.filter(
       (appointment) => appointment.id !== appointmentId
     );
     setAppointments(updatedAppointments);
+    setShowModal(false);
   };
 
   const handleFormSubmit = ({ time, ...appointmentData }: Inputs) => {
@@ -49,42 +46,39 @@ const DoctorCardIC = ({ className, ...doctorDetails }: IProps) => {
     setShowModal(false);
   };
 
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
+
+  const handleOpenModal = () => {
+    setShowModal(true);
+  };
+
   return (
     <div className="doctor-card-container">
       <div className={clsx("doctor-card", className)}>
         <DoctorDetails {...doctorDetails} />
-
-        <Popup
-          trigger={
-            <button
-              className={`book-appointment-btn ${
-                appointments.length > 0 ? "cancel-appointment" : ""
-              }`}
-            >
-              {appointments.length > 0 ? (
-                <div>Cancel Appointment</div>
-              ) : (
-                <div>Book Appointment</div>
-              )}
-            </button>
-          }
-          modal
-          open={showModal}
-          onClose={() => setShowModal(false)}
+        <button
+          className={`book-appointment-btn ${
+            appointments.length > 0 ? "cancel-appointment" : ""
+          }`}
+          onClick={handleOpenModal}
         >
-          {/* @ts-expect-error wrong type*/}
-          {(close) => {
-            return (
-              <AppointmentModal
-                appointments={appointments}
-                timeSlots={timeSlots}
-                doctor={doctorDetails}
-                onCancel={handleCancel}
-                onSubmit={handleFormSubmit}
-                onClose={close}
-              />
-            );
-          }}
+          {appointments.length > 0 ? (
+            <div>Cancel Appointment</div>
+          ) : (
+            <div>Book Appointment</div>
+          )}
+        </button>
+        <Popup open={showModal} onClose={handleCloseModal}>
+          <AppointmentModal
+            appointments={appointments}
+            timeSlots={timeSlots}
+            doctor={doctorDetails}
+            onCancel={handleCancel}
+            onSubmit={handleFormSubmit}
+            onClose={handleCloseModal}
+          />
         </Popup>
       </div>
     </div>

@@ -1,5 +1,6 @@
 import { useId } from "react";
 import clsx from "clsx";
+import "./formElementsStyles.scss";
 
 interface IProps {
   label: string;
