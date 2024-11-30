@@ -2,6 +2,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  height: 100%;
   .form {
     display: flex;
     flex-direction: column;
@@ -56,5 +57,13 @@
 
   .reset {
     background-color: #f34147;
+  }
+
+  .errors {
+    margin-top: 10px;
+
+    .error-text {
+      color: hsl(358 88% 42% / 1);
+    }
   }
 }

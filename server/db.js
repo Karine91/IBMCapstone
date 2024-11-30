@@ -1,7 +1,11 @@
 const mongoose = require("mongoose");
+//temp creds updated every time
+const MONGO_HOST = "172.21.249.212";
+const MONGO_PASSWORD = "";
+const MONGO_USERNAME = "root";
+const MONGO_PORT = "27017";
 
-const mongoURI = `mongodb://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_HOST}:${process.env.PORT}`;
-
+const mongoURI = `mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOST}:${MONGO_PORT}`;
 const connectToMongo = async (retryCount) => {
   const MAX_RETRIES = 3;
   const count = retryCount ?? 0;

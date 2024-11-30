@@ -3,7 +3,10 @@ import "../form/form.scss";
 import "./styles.scss";
 import InputField from "../form/InputField";
 import { validation } from "../form/validation";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { API_URL } from "../../config";
+import { useState } from "react";
+import { useAuth } from "../../hooks/useAuth";
 
 type Inputs = {
   email: string;
@@ -16,8 +19,47 @@ const Login = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<Inputs>({ mode: "onBlur" });
+
+  const navigate = useNavigate();
+
+  const [showErr, setShowErr] = useState<string[]>([]);
+  const { login } = useAuth();
+
   const { required } = validation;
-  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    const { email, password } = data;
+    const response = await fetch(`${API_URL}/api/auth/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email,
+        password,
+      }),
+    });
+
+    const json = await response.json();
+    if (json.authtoken) {
+      // Store user data in session storage
+      login({
+        token: json.authtoken,
+        email,
+      });
+
+      // Redirect user to home page
+      navigate("/");
+      window.location.reload(); // Refresh the page
+    }
+
+    if (json.error) {
+      if (Array.isArray(json.error)) {
+        setShowErr(json.error.map((item: any) => item.msg));
+      } else {
+        setShowErr([json.error.msg]);
+      }
+    }
+  };
   return (
     <div className="form-wrapper login">
       <form className="form" onSubmit={handleSubmit(onSubmit)}>
@@ -52,6 +94,16 @@ const Login = () => {
             Reset
           </button>
         </div>
+
+        {showErr.length ? (
+          <div className="errors">
+            {showErr.map((err, ind) => (
+              <div key={ind} className="error-text">
+                {err}
+              </div>
+            ))}
+          </div>
+        ) : null}
 
         <div className="forgot-pass">
           <Link className="forgot-pass-link" to="#">

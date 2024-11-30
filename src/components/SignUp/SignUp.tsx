@@ -6,6 +6,7 @@ import InputField from "../form/InputField";
 import { validation } from "../form/validation";
 import { Link } from "react-router-dom";
 import { API_URL } from "../../config";
+import { useAuth } from "../../hooks/useAuth";
 
 type Inputs = {
   role: string;
@@ -18,6 +19,7 @@ type Inputs = {
 const SignUp = () => {
   const navigate = useNavigate();
   const [showErr, setShowErr] = useState<string[]>([]);
+  const { login } = useAuth();
 
   const {
     register,
@@ -42,27 +44,26 @@ const SignUp = () => {
       }),
     });
 
-    try {
-      const json = await response.json(); // Parse the response JSON
-      if (json.authtoken) {
-        // Store user data in session storage
-        sessionStorage.setItem("auth-token", json.authtoken);
-        sessionStorage.setItem("name", name);
-        sessionStorage.setItem("phone", phone);
-        sessionStorage.setItem("email", email);
-        // Redirect user to home page
-        navigate("/");
-        window.location.reload(); // Refresh the page
-      }
-    } catch (error: any) {
-      if (error.error) {
-        if (Array.isArray(error.error)) {
-          setShowErr(error.error);
-        } else {
-          setShowErr([error.error]);
-        }
+    const json = await response.json(); // Parse the response JSON
+    if (json.authtoken) {
+      // Store user data in session storage
+      login({
+        token: json.authtoken,
+        name,
+        phone,
+        email,
+      });
+
+      // Redirect user to home page
+      navigate("/");
+      window.location.reload(); // Refresh the page
+    }
+
+    if (json.error) {
+      if (Array.isArray(json.error)) {
+        setShowErr(json.error.map((item: any) => item.msg));
       } else {
-        setShowErr(error.toString());
+        setShowErr([json.error.msg]);
       }
     }
   };
@@ -125,9 +126,15 @@ const SignUp = () => {
             Reset
           </button>
         </div>
-        {showErr.map((err) => (
-          <div className="error-text">{err}</div>
-        ))}
+        {showErr.length ? (
+          <div className="errors">
+            {showErr.map((err, ind) => (
+              <div key={ind} className="error-text">
+                {err}
+              </div>
+            ))}
+          </div>
+        ) : null}
       </form>
     </div>
   );
