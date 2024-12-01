@@ -6,11 +6,13 @@ import AppointmentFormIC, {
   Inputs,
 } from "../AppointmentFormIC/AppointmentFormIC";
 import { v4 as uuidv4 } from "uuid";
-import { IDoctor, Appointment, SelectOptions } from "../types";
+import { IDoctor, Appointment, SelectOptions } from "../../../types";
 import DoctorDetails from "./DoctorDetails";
 import AppointmentsList from "./AppointmentsList";
 import { MdClose } from "react-icons/md";
 import clsx from "clsx";
+import { useNotifications } from "../../../providers/notifications";
+import { useAppointments } from "../../../providers/appointments";
 
 interface IProps extends IDoctor {
   className?: string;
@@ -18,7 +20,12 @@ interface IProps extends IDoctor {
 
 const DoctorCardIC = ({ className, ...doctorDetails }: IProps) => {
   const [showModal, setShowModal] = useState(false);
-  const [appointments, setAppointments] = useState<Appointment[]>([]);
+
+  const { setNotifications } = useNotifications();
+  const { getAppointments, addAppointment, cancelAppointment } =
+    useAppointments();
+  const appointments = getAppointments(doctorDetails.name);
+
   const [timeSlots] = React.useState([
     { value: 9, label: "9:00 - 10:00" },
     { value: 10, label: "10:00 - 11:00" },
@@ -27,10 +34,10 @@ const DoctorCardIC = ({ className, ...doctorDetails }: IProps) => {
   ]);
 
   const handleCancel = (appointmentId: string) => {
-    const updatedAppointments = appointments.filter(
-      (appointment) => appointment.id !== appointmentId
+    cancelAppointment(appointmentId);
+    setNotifications((state) =>
+      state.filter((item) => item.id !== appointmentId)
     );
-    setAppointments(updatedAppointments);
     setShowModal(false);
   };
 
@@ -39,10 +46,13 @@ const DoctorCardIC = ({ className, ...doctorDetails }: IProps) => {
       id: uuidv4(),
       time: timeSlots.find((item) => item.value === Number(time))!,
       ...appointmentData,
+      doctor: {
+        name: doctorDetails.name,
+        speciality: doctorDetails.speciality,
+      },
     };
-    console.log(newAppointment);
-    const updatedAppointments = [...appointments, newAppointment];
-    setAppointments(updatedAppointments);
+    setNotifications((state) => [...state, newAppointment]);
+    addAppointment(newAppointment);
     setShowModal(false);
   };
 
@@ -70,7 +80,11 @@ const DoctorCardIC = ({ className, ...doctorDetails }: IProps) => {
             <div>Book Appointment</div>
           )}
         </button>
-        <Popup open={showModal} onClose={handleCloseModal}>
+        <Popup
+          className="appointments-modal"
+          open={showModal}
+          onClose={handleCloseModal}
+        >
           <AppointmentModal
             appointments={appointments}
             timeSlots={timeSlots}

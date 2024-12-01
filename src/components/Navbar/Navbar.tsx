@@ -1,10 +1,11 @@
 import "./Navbar.scss";
 import { RiHeartPulseLine } from "react-icons/ri";
 import { Link } from "react-router-dom";
-import { useAuth } from "../../hooks/useAuth";
+import { useUser } from "../../providers/auth";
+import UserMenu from "../userMenu/UserMenu";
 
 const Navbar = ({ variant = "dark" }: { variant?: "dark" | "light" }) => {
-  const { user, logout } = useAuth();
+  const { user, logout } = useUser();
 
   return (
     <nav data-variant={variant} className="navbar">
@@ -29,9 +30,7 @@ const Navbar = ({ variant = "dark" }: { variant?: "dark" | "light" }) => {
         </ul>
         {user ? (
           <>
-            <div className="user-welcome">
-              Welcome, {user.name || user.email}
-            </div>
+            <UserMenu />
             <button onClick={logout} className="btn">
               Logout
             </button>

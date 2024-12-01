@@ -6,7 +6,7 @@ import { validation } from "../form/validation";
 import { Link, useNavigate } from "react-router-dom";
 import { API_URL } from "../../config";
 import { useState } from "react";
-import { useAuth } from "../../hooks/useAuth";
+import { useUser } from "../../providers/auth";
 
 type Inputs = {
   email: string;
@@ -23,41 +23,45 @@ const Login = () => {
   const navigate = useNavigate();
 
   const [showErr, setShowErr] = useState<string[]>([]);
-  const { login } = useAuth();
+  const { login } = useUser();
 
   const { required } = validation;
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     const { email, password } = data;
-    const response = await fetch(`${API_URL}/api/auth/login`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email,
-        password,
-      }),
-    });
-
-    const json = await response.json();
-    if (json.authtoken) {
-      // Store user data in session storage
-      login({
-        token: json.authtoken,
-        email,
+    try {
+      const response = await fetch(`${API_URL}/api/auth/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
       });
 
-      // Redirect user to home page
-      navigate("/");
-      window.location.reload(); // Refresh the page
-    }
+      const json = await response.json();
+      if (json.authtoken) {
+        // Store user data in session storage
+        login({
+          token: json.authtoken,
+          email,
+        });
 
-    if (json.error) {
-      if (Array.isArray(json.error)) {
-        setShowErr(json.error.map((item: any) => item.msg));
-      } else {
-        setShowErr([json.error.msg]);
+        // Redirect user to home page
+        navigate("/");
       }
+
+      if (json.error) {
+        if (Array.isArray(json.error)) {
+          setShowErr(json.error.map((item: any) => item.msg));
+        } else {
+          setShowErr([json.error.msg || json.error.toString()]);
+        }
+      }
+    } catch (error) {
+      console.log(error);
+      setShowErr(["Something went wrong..."]);
     }
   };
   return (

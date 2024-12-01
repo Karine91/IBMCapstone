@@ -6,7 +6,7 @@ import InputField from "../form/InputField";
 import { validation } from "../form/validation";
 import { Link } from "react-router-dom";
 import { API_URL } from "../../config";
-import { useAuth } from "../../hooks/useAuth";
+import { useUser } from "../../providers/auth";
 
 type Inputs = {
   role: string;
@@ -19,7 +19,7 @@ type Inputs = {
 const SignUp = () => {
   const navigate = useNavigate();
   const [showErr, setShowErr] = useState<string[]>([]);
-  const { login } = useAuth();
+  const { login } = useUser();
 
   const {
     register,
@@ -56,7 +56,6 @@ const SignUp = () => {
 
       // Redirect user to home page
       navigate("/");
-      window.location.reload(); // Refresh the page
     }
 
     if (json.error) {

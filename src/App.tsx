@@ -6,21 +6,25 @@ import Login from "./components/Login/Login";
 import InstantConsultation from "./components/InstantConsultationBooking/InstantConsultation";
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { AuthProvider } from "./providers/auth";
+import { AppointmentsProvider } from "./providers/appointments";
+import { NotificationsProvider } from "./providers/notifications";
 
 const router = createBrowserRouter([
   {
     element: <AuthRoot />,
+    path: "/",
     children: [
       {
         path: "/",
         element: <Home />,
       },
       {
-        path: "/login",
+        path: "login",
         element: <Login />,
       },
       {
-        path: "/signup",
+        path: "signup",
         element: <SignUp />,
       },
     ],
@@ -37,7 +41,15 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <AuthProvider>
+      <AppointmentsProvider>
+        <NotificationsProvider>
+          <RouterProvider router={router} />
+        </NotificationsProvider>
+      </AppointmentsProvider>
+    </AuthProvider>
+  );
 }
 
 export default App;

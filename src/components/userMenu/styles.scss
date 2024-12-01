@@ -1,0 +1,41 @@
+.user-welcome-btn {
+  background: none;
+  color: white;
+  border: none;
+  display: flex;
+  align-items: center;
+
+  .notifications-count {
+    background-color: var(--red);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    font-size: 14px;
+    margin-left: 10px;
+  }
+}
+
+.notifications-popup {
+  padding: 10px;
+}
+
+.notification-popup-content.popup-content[role="tooltip"] {
+  width: auto;
+}
+
+.notification {
+  padding: 10px 5px;
+  border-bottom: 1px solid var(--neutral-light);
+
+  span {
+    font-weight: 600;
+    color: black;
+  }
+
+  &:last-child {
+    border: none;
+  }
+}

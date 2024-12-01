@@ -1,4 +1,4 @@
-import { Appointment } from "../types";
+import { Appointment } from "../../../types";
 
 const AppointmentsList = ({
   appointments,
