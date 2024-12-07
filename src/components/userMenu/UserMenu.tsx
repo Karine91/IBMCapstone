@@ -10,18 +10,23 @@ const UserMenu = () => {
   const { notifications } = useNotifications();
   const ref = useRef<any>() as RefObject<PopupActions>;
   const timeRef = useRef<number>();
+  const firstRender = useRef(true);
 
   useEffect(() => {
-    if (notifications.length) {
-      ref.current?.open();
-      timeRef.current = setTimeout(() => {
-        ref.current?.close();
-      }, 3000);
-    }
+    if (!firstRender.current) {
+      if (notifications.length) {
+        ref.current?.open();
+        timeRef.current = setTimeout(() => {
+          ref.current?.close();
+        }, 3000);
+      }
 
-    return () => {
-      clearTimeout(timeRef.current);
-    };
+      return () => {
+        clearTimeout(timeRef.current);
+      };
+    } else {
+      firstRender.current = false;
+    }
   }, [notifications]);
 
   if (!user) return;
