@@ -58,13 +58,10 @@ const InstantConsultation = () => {
           setSpeciality={handleSetSpeciality}
           onSearch={handleSearch}
         />
-        <div className="search-results-container">
+        <div data-testid="search-results" className="search-results-container">
           {searchText || speciality ? (
             <div className="search-results">
-              <h2>
-                {filteredDoctors.length} doctors are available{" "}
-                {searchParams.get("location")}
-              </h2>
+              <h2>{filteredDoctors.length} doctors are available </h2>
               <h3>
                 Book appointments with minimum wait-time & verified doctor
                 details

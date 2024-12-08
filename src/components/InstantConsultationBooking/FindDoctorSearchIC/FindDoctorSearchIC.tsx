@@ -58,7 +58,7 @@ const FindDoctorSearchIC = ({
         </div>
         <div className="home-search-container">
           <div className="doctor-search-box">
-            <div className="search-bar">
+            <div data-testid="search-bar" className="search-bar">
               {specialitiesSelectedList.map((item) => (
                 <div
                   key={item}
