@@ -3,12 +3,15 @@ import { Appointment } from "../types";
 
 const AppointmentsContext = React.createContext({} as AppointmentsContextValue);
 AppointmentsContext.displayName = "AppointmentsContext";
+import PubSub from "pubsub-js";
 
 type AppointmentsContextValue = {
   cancelAppointment: (id: string) => void;
   addAppointment: (appointment: Appointment) => void;
   getAppointments: (doc: string) => Appointment[];
 };
+
+export const ADD_APPOINTMENT = "ADD_APPOINTMENT";
 
 export const AppointmentsProvider = ({
   children,
@@ -19,6 +22,7 @@ export const AppointmentsProvider = ({
 
   const addAppointment = (newAppointment: Appointment) => {
     setAppointments((state) => [...state, newAppointment]);
+    PubSub.publish(ADD_APPOINTMENT);
   };
 
   const cancelAppointment = (appointmentId: string) => {

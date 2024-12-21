@@ -21,7 +21,7 @@ interface IProps extends IDoctor {
 const DoctorCardIC = ({ className, ...doctorDetails }: IProps) => {
   const [showModal, setShowModal] = useState(false);
 
-  const { setNotifications } = useNotifications();
+  const { setNotifications, removeNotification } = useNotifications();
   const { getAppointments, addAppointment, cancelAppointment } =
     useAppointments();
   const appointments = getAppointments(doctorDetails.name);
@@ -35,13 +35,13 @@ const DoctorCardIC = ({ className, ...doctorDetails }: IProps) => {
 
   const handleCancel = (appointmentId: string) => {
     cancelAppointment(appointmentId);
-    setNotifications((state) =>
-      state.filter((item) => item.id !== appointmentId)
-    );
+    removeNotification(appointmentId);
+
     setShowModal(false);
   };
 
   const handleFormSubmit = ({ time, ...appointmentData }: Inputs) => {
+    setShowModal(false);
     const newAppointment: Appointment = {
       id: uuidv4(),
       time: timeSlots.find((item) => item.value === Number(time))!,
@@ -51,9 +51,8 @@ const DoctorCardIC = ({ className, ...doctorDetails }: IProps) => {
         speciality: doctorDetails.speciality,
       },
     };
-    setNotifications((state) => [...state, newAppointment]);
+    setNotifications(newAppointment);
     addAppointment(newAppointment);
-    setShowModal(false);
   };
 
   const handleCloseModal = () => {

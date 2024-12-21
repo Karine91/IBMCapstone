@@ -8,7 +8,8 @@ NotificationsContext.displayName = "NotificationsContext";
 
 type NotificationsContextValue = {
   notifications: Appointment[];
-  setNotifications: React.Dispatch<React.SetStateAction<Appointment[]>>;
+  setNotifications: (val: Appointment) => void;
+  removeNotification: (id: string) => void;
 };
 
 export const NotificationsProvider = ({
@@ -18,9 +19,20 @@ export const NotificationsProvider = ({
 }) => {
   const [notifications, setNotifications] = React.useState<Appointment[]>([]);
 
+  const onSetNotification = (newAppointment: Appointment) => {
+    setNotifications((state) => [...state, newAppointment]);
+  };
+
+  const removeNotification = (appointmentId: string) => {
+    setNotifications((state) =>
+      state.filter((item) => item.id !== appointmentId)
+    );
+  };
+
   const value: NotificationsContextValue = {
     notifications,
-    setNotifications,
+    setNotifications: onSetNotification,
+    removeNotification,
   };
 
   return (

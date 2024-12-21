@@ -1,5 +1,5 @@
 import React from "react";
-import { User, Appointment } from "../types";
+import { User } from "../types";
 
 const getUserData = () => {
   const userData = sessionStorage.getItem("userData");
@@ -14,16 +14,11 @@ type AuthContextValue = {
   logout: () => void;
   login: (data: User) => void;
   user: User | null;
-
-  cancelAppointment: (id: string) => void;
-  addAppointment: (appointment: Appointment) => void;
-  appointments: Appointment[];
+  isLoggedIn: boolean;
 };
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUserData] = React.useState<User | null>(getUserData);
-
-  const [appointments, setAppointments] = React.useState<Appointment[]>([]);
 
   const logout = () => {
     sessionStorage.removeItem("userData");
@@ -35,24 +30,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setUserData(data);
   };
 
-  const addAppointment = (newAppointment: Appointment) => {
-    setAppointments((state) => [...state, newAppointment]);
-  };
-
-  const cancelAppointment = (appointmentId: string) => {
-    setAppointments((state) =>
-      state.filter((appointment) => appointment.id !== appointmentId)
-    );
-  };
-
   const value: AuthContextValue = {
     logout,
     login,
     user,
-
-    cancelAppointment,
-    addAppointment,
-    appointments,
+    isLoggedIn: Boolean(user),
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
