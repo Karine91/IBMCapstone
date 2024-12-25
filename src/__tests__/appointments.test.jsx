@@ -2,12 +2,14 @@ import React from "react";
 import InstantConsultation from "../components/InstantConsultationBooking/InstantConsultation";
 import { http, HttpResponse } from "msw";
 import { setupServer } from "msw/node";
-import { render, screen, within } from "../test-utils";
+import { render, screen, waitFor, within } from "../test-utils";
 import MainRoot from "../layouts/MainRoot";
 import doctors from "./doctors.json";
 import { MemoryRouter, Routes, Route } from "react-router";
+import userEvent from "@testing-library/user-event";
 import {
   beforeAll,
+  beforeEach,
   afterEach,
   afterAll,
   describe,
@@ -80,7 +82,8 @@ describe("appointments", () => {
     );
   });
 
-  it("should show notification after booking an appointment", () => {
+  it("should show notification after booking an appointment", async () => {
+    vi.mocked(mocks.get).mockReturnValue("dentist");
     vi.mocked(mocks.getUser).mockReturnValue({
       logout: vi.fn(),
       login: vi.fn(),
@@ -103,5 +106,21 @@ describe("appointments", () => {
         </Routes>
       </MemoryRouter>
     );
+
+    const docCardBook = await screen.findAllByRole("button", {
+      name: /book appointment/i,
+    });
+
+    await userEvent.click(docCardBook[0]);
+
+    const nameInput = screen.getByPlaceholderText("Enter your name");
+    const phoneInput = screen.getByPlaceholderText("Enter your phone");
+    const dateInput = screen.getByLabelText("Date of Appointment");
+    const timeSlot = screen.getByLabelText("Book Time Slot");
+
+    screen.debug(dateInput);
+    screen.debug(timeSlot);
+
+    // expect(nameInput).toBeInTheDocument();
   });
 });

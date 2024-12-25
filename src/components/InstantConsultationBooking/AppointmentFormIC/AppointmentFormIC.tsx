@@ -56,7 +56,7 @@ const AppointmentFormIC = ({ onSubmit, timeSlots }: IProps) => {
         error={errors.date}
       />
 
-      <FormField label="Book Time Slot:" error={errors.time}>
+      <FormField label="Book Time Slot" error={errors.time}>
         {(id) => (
           <Select
             id={id}

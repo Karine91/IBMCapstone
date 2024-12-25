@@ -73,11 +73,7 @@ const DoctorCardIC = ({ className, ...doctorDetails }: IProps) => {
           }`}
           onClick={handleOpenModal}
         >
-          {appointments.length > 0 ? (
-            <div>Cancel Appointment</div>
-          ) : (
-            <div>Book Appointment</div>
-          )}
+          {appointments.length > 0 ? "Cancel Appointment" : "Book Appointment"}
         </button>
         <Popup
           className="appointments-modal"
