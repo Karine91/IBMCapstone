@@ -1,32 +1,20 @@
-import React from "react";
 import { MemoryRouter } from "react-router-dom";
 import Navbar from "../components/Navbar/Navbar";
 import { render, screen } from "../test-utils";
+import * as auth from "../providers/auth";
 
-import { describe, expect, it, vi } from "vitest";
-
-const mocks = vi.hoisted(() => {
-  return {
-    getUser: vi.fn(),
-  };
-});
-
-vi.mock("../providers/auth", async (importOriginal) => {
-  const actual = await importOriginal();
-  return {
-    ...actual,
-    useUser: mocks.getUser,
-  };
+beforeEach(() => {
+  jest.restoreAllMocks();
 });
 
 describe("navbar", () => {
   it("should show login and sign up btns if not logged in", async () => {
-    vi.mocked(mocks.getUser).mockReturnValue({
-      logout: vi.fn(),
-      login: vi.fn(),
+    jest.spyOn(auth, "useUser").mockImplementation(() => ({
+      logout: jest.fn(),
+      login: jest.fn(),
       user: null,
-      isLoggedIn: false,
-    });
+      isLoggedIn: true,
+    }));
     render(
       <MemoryRouter initialEntries={["/"]}>
         <Navbar />
@@ -38,16 +26,16 @@ describe("navbar", () => {
   });
 
   it("should show user name if loggedIn", async () => {
-    vi.mocked(mocks.getUser).mockReturnValue({
-      logout: vi.fn(),
-      login: vi.fn(),
+    const spy = jest.spyOn(auth, "useUser").mockImplementation(() => ({
+      logout: jest.fn(),
+      login: jest.fn(),
       user: {
         token: "token",
         email: "test@test.com",
         name: "Test",
       },
       isLoggedIn: true,
-    });
+    }));
 
     render(
       <MemoryRouter initialEntries={["/"]}>
@@ -55,20 +43,22 @@ describe("navbar", () => {
       </MemoryRouter>
     );
 
+    expect(spy).toHaveBeenCalled();
+
     expect(screen.getByText(/welcome, Test/i)).toBeInTheDocument();
     expect(screen.getByText(/logout/i)).toBeInTheDocument();
   });
 
   it("should show user email if loggedIn and no name", async () => {
-    vi.mocked(mocks.getUser).mockReturnValue({
-      logout: vi.fn(),
-      login: vi.fn(),
+    jest.spyOn(auth, "useUser").mockImplementation(() => ({
+      logout: jest.fn(),
+      login: jest.fn(),
       user: {
         token: "token",
         email: "test@test.com",
       },
       isLoggedIn: true,
-    });
+    }));
 
     render(
       <MemoryRouter initialEntries={["/"]}>

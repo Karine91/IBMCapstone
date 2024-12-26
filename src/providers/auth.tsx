@@ -10,7 +10,7 @@ const getUserData = () => {
 const AuthContext = React.createContext({} as AuthContextValue);
 AuthContext.displayName = "AuthContext";
 
-type AuthContextValue = {
+export type AuthContextValue = {
   logout: () => void;
   login: (data: User) => void;
   user: User | null;

@@ -11,7 +11,7 @@ const UserMenu = () => {
   const { user } = useUser();
   const { notifications } = useNotifications();
   const ref = useRef<any>() as RefObject<PopupActions>;
-  const timeRef = useRef<number>();
+  const timeRef = useRef<NodeJS.Timeout>();
 
   const showNotifications = () => {
     ref.current?.open();
