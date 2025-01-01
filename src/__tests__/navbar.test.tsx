@@ -3,7 +3,7 @@ import Navbar from "../components/Navbar/Navbar";
 import { render, screen } from "../test-utils";
 import * as auth from "../providers/auth";
 
-beforeEach(() => {
+afterEach(() => {
   jest.restoreAllMocks();
 });
 

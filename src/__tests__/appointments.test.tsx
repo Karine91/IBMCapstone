@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React from "react";
 import InstantConsultation from "../components/InstantConsultationBooking/InstantConsultation";
 import { http, HttpResponse } from "msw";
@@ -5,8 +6,12 @@ import { setupServer } from "msw/node";
 import { render, screen, waitFor, within } from "../test-utils";
 import MainRoot from "../layouts/MainRoot";
 import doctors from "./doctors.json";
-import { MemoryRouter, Routes, Route } from "react-router";
+import { MemoryRouter } from "react-router";
+import * as router from "react-router-dom";
 import userEvent from "@testing-library/user-event";
+import * as auth from "../providers/auth";
+
+jest.mock("uuid");
 
 const server = setupServer(
   http.get("https://api.npoint.io/9a5543d36f1460da2f63", () => {
@@ -17,30 +22,9 @@ const server = setupServer(
 beforeAll(() => server.listen());
 afterEach(() => {
   server.resetHandlers();
+  jest.restoreAllMocks();
 });
 afterAll(() => server.close());
-
-// const mocks = vi.hoisted(() => {
-//   return {
-//     get: vi.fn(),
-//     getUser: vi.fn(),
-//   };
-// });
-
-// jest.mock("react-router-dom", async (importOriginal) => {
-//   const actual = await importOriginal();
-//   return {
-//     ...actual,
-//     useSearchParams: () => {
-//       return [
-//         {
-//           get: mocks.get,
-//         },
-//         vi.fn(),
-//       ];
-//     },
-//   };
-// });
 
 // vi.mock("../providers/auth", async (importOriginal) => {
 //   const actual = await importOriginal();
@@ -52,10 +36,19 @@ afterAll(() => server.close());
 
 describe("appointments", () => {
   it("should show search bar with selected speciality by search param", async () => {
-    //vi.mocked(mocks.get).mockReturnValue("dentist");
-    // render(<InstantConsultation />);
-    // const searchBar = screen.getByTestId("search-bar");
-    // expect(await within(searchBar).findByText(/dentist/i)).toBeDefined();
+    jest
+      .spyOn(router, "useSearchParams")
+      .mockImplementation(() => [
+        { get: (s: string) => "dentist" } as URLSearchParams,
+        jest.fn(),
+      ]);
+    render(
+      <MemoryRouter initialEntries={["/"]}>
+        <InstantConsultation />
+      </MemoryRouter>
+    );
+    const searchBar = screen.getByTestId("search-bar");
+    expect(await within(searchBar).findByText(/dentist/i)).toBeDefined();
   });
 
   // it("should show search results when speciality selected", async () => {

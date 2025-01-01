@@ -4,7 +4,7 @@ import { validation } from "../../form/validation";
 import "./style.scss";
 import Select from "../../form/Select";
 import FormField from "../../form/FormField";
-import { SelectOptions } from "../types";
+import { SelectOptions } from "../../../types";
 
 export type Inputs = {
   name: string;
