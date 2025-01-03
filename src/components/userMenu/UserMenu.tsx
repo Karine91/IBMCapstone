@@ -32,7 +32,7 @@ const UserMenu = () => {
   if (!user) return;
 
   return (
-    <div className="user-menu">
+    <div className="user-menu" data-testid="userMenu">
       {!notifications.length ? (
         <div className="user-welcome">Welcome, {user.name || user.email}</div>
       ) : (
@@ -54,7 +54,7 @@ const UserMenu = () => {
           }
           position="bottom center"
         >
-          <div className="notifications-popup">
+          <div className="notifications-popup" data-testid="notificationsPopup">
             {notifications.reverse().map((item, ind) => (
               <div className="notification" key={ind}>
                 <div>

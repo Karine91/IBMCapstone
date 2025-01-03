@@ -32,7 +32,11 @@ const AppointmentFormIC = ({ onSubmit, timeSlots }: IProps) => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="appointment-form">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="appointment-form"
+      data-testid="appointment-form"
+    >
       <InputField
         register={register("name", { required })}
         label="Name"
