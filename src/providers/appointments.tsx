@@ -8,7 +8,7 @@ import PubSub from "pubsub-js";
 type AppointmentsContextValue = {
   cancelAppointment: (id: string) => void;
   addAppointment: (appointment: Appointment) => void;
-  getAppointments: (doc: string) => Appointment[];
+  getAppointment: (doc: string) => Appointment | undefined;
 };
 
 export const ADD_APPOINTMENT = "ADD_APPOINTMENT";
@@ -31,14 +31,14 @@ export const AppointmentsProvider = ({
     );
   };
 
-  const getAppointments = (doctor: string) => {
-    return appointments.filter((item) => item.doctor.name === doctor);
+  const getAppointment = (doctor: string) => {
+    return appointments.find((item) => item.doctor.name === doctor);
   };
 
   const value: AppointmentsContextValue = {
     cancelAppointment,
     addAppointment,
-    getAppointments,
+    getAppointment,
   };
 
   return (

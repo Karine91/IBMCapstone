@@ -8,7 +8,7 @@ import AppointmentFormIC, {
 import { v4 as uuidv4 } from "uuid";
 import { IDoctor, Appointment, SelectOptions } from "../../../types";
 import DoctorDetails from "./DoctorDetails";
-import AppointmentsList from "./AppointmentsList";
+import BookedAppointment from "./BookedAppointment";
 import { MdClose } from "react-icons/md";
 import clsx from "clsx";
 import { useNotifications } from "../../../providers/notifications";
@@ -22,9 +22,9 @@ const DoctorCardIC = ({ className, ...doctorDetails }: IProps) => {
   const [showModal, setShowModal] = useState(false);
 
   const { setNotifications, removeNotification } = useNotifications();
-  const { getAppointments, addAppointment, cancelAppointment } =
+  const { getAppointment, addAppointment, cancelAppointment } =
     useAppointments();
-  const appointments = getAppointments(doctorDetails.name);
+  const appointment = getAppointment(doctorDetails.name);
 
   const [timeSlots] = React.useState([
     { value: 9, label: "9:00 - 10:00" },
@@ -42,17 +42,20 @@ const DoctorCardIC = ({ className, ...doctorDetails }: IProps) => {
 
   const handleFormSubmit = ({ time, ...appointmentData }: Inputs) => {
     setShowModal(false);
-    const newAppointment: Appointment = {
-      id: uuidv4(),
-      time: timeSlots.find((item) => item.value === Number(time))!,
-      ...appointmentData,
-      doctor: {
-        name: doctorDetails.name,
-        speciality: doctorDetails.speciality,
-      },
-    };
-    setNotifications(newAppointment);
-    addAppointment(newAppointment);
+    // close modal first to not see appointment lists while closing
+    setTimeout(() => {
+      const newAppointment: Appointment = {
+        id: uuidv4(),
+        time: timeSlots.find((item) => item.value === Number(time))!,
+        ...appointmentData,
+        doctor: {
+          name: doctorDetails.name,
+          speciality: doctorDetails.speciality,
+        },
+      };
+      setNotifications(newAppointment);
+      addAppointment(newAppointment);
+    });
   };
 
   const handleCloseModal = () => {
@@ -69,11 +72,11 @@ const DoctorCardIC = ({ className, ...doctorDetails }: IProps) => {
         <DoctorDetails {...doctorDetails} />
         <button
           className={`book-appointment-btn ${
-            appointments.length > 0 ? "cancel-appointment" : ""
+            appointment ? "cancel-appointment" : ""
           }`}
           onClick={handleOpenModal}
         >
-          {appointments.length > 0 ? "Cancel Appointment" : "Book Appointment"}
+          {appointment ? "Cancel Appointment" : "Book Appointment"}
         </button>
         <Popup
           className="appointments-modal"
@@ -81,7 +84,7 @@ const DoctorCardIC = ({ className, ...doctorDetails }: IProps) => {
           onClose={handleCloseModal}
         >
           <AppointmentModal
-            appointments={appointments}
+            appointment={appointment}
             timeSlots={timeSlots}
             doctor={doctorDetails}
             onCancel={handleCancel}
@@ -95,14 +98,14 @@ const DoctorCardIC = ({ className, ...doctorDetails }: IProps) => {
 };
 
 const AppointmentModal = ({
-  appointments,
+  appointment,
   doctor,
   onSubmit,
   onCancel,
   onClose,
   timeSlots,
 }: {
-  appointments: Appointment[];
+  appointment?: Appointment;
   doctor: IDoctor;
   onSubmit: (appointmentData: Inputs) => void;
   onCancel: (id: string) => void;
@@ -110,7 +113,7 @@ const AppointmentModal = ({
   timeSlots: SelectOptions[];
 }) => {
   return (
-    <div className="doctorbg">
+    <div data-testid="appointment-modal" className="doctorbg">
       <div className="close-modal">
         <button onClick={onClose} className="close-button">
           <MdClose className="close-icon" />
@@ -120,8 +123,8 @@ const AppointmentModal = ({
         <DoctorDetails {...doctor} />
       </div>
 
-      {appointments.length > 0 ? (
-        <AppointmentsList appointments={appointments} handleCancel={onCancel} />
+      {appointment ? (
+        <BookedAppointment appointment={appointment} handleCancel={onCancel} />
       ) : (
         <AppointmentFormIC onSubmit={onSubmit} timeSlots={timeSlots} />
       )}

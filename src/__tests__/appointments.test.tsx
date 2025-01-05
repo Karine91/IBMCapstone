@@ -1,9 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React from "react";
 import InstantConsultation from "../components/InstantConsultationBooking/InstantConsultation";
 import { http, HttpResponse } from "msw";
 import { setupServer } from "msw/node";
-import { render, screen, waitFor, fireEvent, within } from "../test-utils";
+import { render, screen, fireEvent, within } from "../test-utils";
 import MainRoot from "../layouts/MainRoot";
 import doctors from "./doctors.json";
 import { MemoryRouter, Routes, Route } from "react-router";
@@ -23,14 +22,6 @@ afterEach(() => {
   jest.restoreAllMocks();
 });
 afterAll(() => server.close());
-
-// vi.mock("../providers/auth", async (importOriginal) => {
-//   const actual = await importOriginal();
-//   return {
-//     ...actual,
-//     useUser: mocks.getUser,
-//   };
-// });
 
 describe("appointments", () => {
   it("should show search bar with selected speciality by search param", async () => {
@@ -71,7 +62,7 @@ describe("appointments", () => {
     );
   });
 
-  it("should show notification after booking an appointment", async () => {
+  it("should show notification after booking an appointment and remove notification after cancelling", async () => {
     const user = userEvent.setup();
     const spec = "dentist";
     jest
@@ -107,7 +98,9 @@ describe("appointments", () => {
       name: /book appointment/i,
     });
 
-    await user.click(docCardBook[0]);
+    const selectedDoctorBtn = docCardBook[0];
+
+    await user.click(selectedDoctorBtn);
 
     const nameInput = screen.getByPlaceholderText("Enter your name");
     const phoneInput = screen.getByPlaceholderText("Enter your phone");
@@ -125,7 +118,7 @@ describe("appointments", () => {
 
     const userMenu = screen.getByTestId("userMenu");
 
-    const popup = screen.getByTestId("notificationsPopup");
+    const popup = await screen.findByTestId("notificationsPopup");
 
     within(popup).getByText(/karine/i);
     within(popup).getByText(/2024-01-03/i);
@@ -134,5 +127,26 @@ describe("appointments", () => {
     expect(userMenu.querySelector(".notifications-count")?.textContent).toBe(
       "1"
     );
+
+    // cancelling appointment
+    expect(selectedDoctorBtn).toHaveTextContent(/cancel appointment/i);
+
+    await user.click(selectedDoctorBtn);
+
+    const modal = screen.getByTestId("appointment-modal");
+
+    within(modal).getByText(/karine/i);
+    within(modal).getByText(/2024-01-03/i);
+    within(modal).getByText(/123456789/i);
+    within(modal).getByText(/9:00 - 10:00/i);
+
+    const cancelBtn = within(modal).getByRole("button", {
+      name: /cancel appointment/i,
+    });
+    await user.click(cancelBtn);
+
+    expect(
+      userMenu.querySelector(".notifications-count")
+    ).not.toBeInTheDocument();
   });
 });
