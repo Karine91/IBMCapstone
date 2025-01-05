@@ -1,0 +1,21 @@
+.review-form {
+  width: 600px;
+}
+
+.review-content-input {
+  width: 100%;
+  border: 1px solid var(--neutral-dark);
+  border-radius: 5px;
+  margin: 10px 0;
+  padding: 10px;
+}
+
+.reviews {
+}
+
+.review-item {
+  display: flex;
+  gap: 20px;
+  border-bottom: 1px solid var(--neutral-dark);
+  padding: 20px;
+}

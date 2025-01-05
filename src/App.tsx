@@ -3,6 +3,7 @@ import MainRoot from "./layouts/MainRoot";
 import Home from "./components/Home/Home";
 import SignUp from "./components/SignUp/SignUp";
 import Login from "./components/Login/Login";
+import ReviewsList from "./components/reviews/ReviewsList";
 import InstantConsultation from "./components/InstantConsultationBooking/InstantConsultation";
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
@@ -35,6 +36,10 @@ const router = createBrowserRouter([
       {
         path: "/instant-consultation",
         element: <InstantConsultation />,
+      },
+      {
+        path: "/reviews",
+        element: <ReviewsList />,
       },
     ],
   },

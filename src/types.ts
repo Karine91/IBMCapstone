@@ -29,3 +29,10 @@ export type SelectOptions = {
   label: string;
   value: number | string;
 };
+
+export type ClientReview = {
+  userName: string;
+  content: string;
+};
+
+export type ReviewedDoctor = { doctor: IDoctor; review: ClientReview | null };
