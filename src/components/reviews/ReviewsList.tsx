@@ -55,7 +55,10 @@ const ReviewsList = () => {
                 <span>- {item.review.userName}</span>
               </div>
             ) : (
-              <ReviewForm onSubmit={handleSubmitReview} doctor={item.doctor} />
+              <ReviewForm
+                onSubmitCb={handleSubmitReview}
+                doctor={item.doctor}
+              />
             )}
           </div>
         ))}

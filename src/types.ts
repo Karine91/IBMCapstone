@@ -33,6 +33,7 @@ export type SelectOptions = {
 export type ClientReview = {
   userName: string;
   content: string;
+  rating?: number;
 };
 
 export type ReviewedDoctor = { doctor: IDoctor; review: ClientReview | null };

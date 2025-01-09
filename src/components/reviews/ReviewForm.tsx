@@ -1,38 +1,62 @@
-import { FormEvent, useState } from "react";
 import { useUser } from "../../providers/auth";
 import "./styles.scss";
 import { IDoctor, ReviewedDoctor } from "../../types";
+import RatingStars from "../rating/RatingStars";
+import { useForm, SubmitHandler, Controller } from "react-hook-form";
 
 interface IProps {
-  onSubmit: (data: ReviewedDoctor) => void;
+  onSubmitCb: (data: ReviewedDoctor) => void;
   doctor: IDoctor;
 }
 
-const ReviewForm = ({ onSubmit, doctor }: IProps) => {
+interface Inputs {
+  rating: number;
+  content: string;
+}
+
+const ReviewForm = ({ onSubmitCb, doctor }: IProps) => {
   const user = useUser();
 
-  const [content, setContent] = useState("");
+  const {
+    register,
+    handleSubmit,
+    control,
+    //formState: { errors },
+  } = useForm<Inputs>();
 
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault();
-    onSubmit({
+  const onSubmit: SubmitHandler<Inputs> = (data) => {
+    onSubmitCb({
       doctor,
       review: {
         userName: user.user!.name || "Anonym",
-        content,
+        content: data.content,
+        rating: data.rating,
       },
     });
   };
+
   return (
-    <form className="review-form" onSubmit={handleSubmit}>
+    <form className="review-form" onSubmit={handleSubmit(onSubmit)}>
+      <Controller
+        name="rating"
+        control={control}
+        render={({ field }) => (
+          <RatingStars
+            edit
+            rating={field.value}
+            onClick={(val: number) => {
+              field.onChange(val);
+            }}
+          />
+        )}
+      />
+
       <textarea
-        name="content"
-        value={content}
-        onChange={(e) => setContent(e.target.value)}
         className="review-content-input"
         placeholder="Type here..."
         rows={10}
-      ></textarea>
+        {...register("content")}
+      />
       <button className="btn" type="submit">
         Submit review
       </button>
