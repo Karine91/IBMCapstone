@@ -22,7 +22,10 @@ const RatingStars = ({
   };
 
   return (
-    <div onMouseLeave={() => edit && setRating(initRating)}>
+    <div
+      data-testid="rating-stars"
+      onMouseLeave={() => edit && setRating(initRating)}
+    >
       <Star
         star={1}
         rating={rating}
