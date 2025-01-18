@@ -1,2 +1,1 @@
-export const API_URL =
-  "https://gulkarine91-8181.theiadockernext-1-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai";
+export const API_URL = import.meta.env.VITE_API_URL;
