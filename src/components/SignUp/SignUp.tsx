@@ -5,8 +5,8 @@ import "../form/form.scss";
 import InputField from "../form/InputField";
 import { validation } from "../form/validation";
 import { Link } from "react-router-dom";
-import { API_URL } from "../../config";
 import { useUser } from "../../providers/auth";
+import { signup, fetchProfile } from "../../api/auth";
 
 type Inputs = {
   role: string;
@@ -19,7 +19,7 @@ type Inputs = {
 const SignUp = () => {
   const navigate = useNavigate();
   const [showErr, setShowErr] = useState<string[]>([]);
-  const { login } = useUser();
+  const { saveToken, setProfile } = useUser();
 
   const {
     register,
@@ -30,40 +30,28 @@ const SignUp = () => {
   const { required } = validation;
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    const { name, email, phone, password } = data;
-    const response = await fetch(`${API_URL}/api/auth/register`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name,
-        email,
-        password,
-        phone,
-      }),
-    });
+    try {
+      const json = await signup(data);
+      if (json.authtoken) {
+        // Store user data in session storage
+        saveToken(json.authtoken);
+        const userData = await fetchProfile(data.email, json.authtoken);
+        setProfile(userData);
 
-    const json = await response.json(); // Parse the response JSON
-    if (json.authtoken) {
-      // Store user data in session storage
-      login({
-        token: json.authtoken,
-        name,
-        phone,
-        email,
-      });
-
-      // Redirect user to home page
-      navigate("/");
-    }
-
-    if (json.error) {
-      if (Array.isArray(json.error)) {
-        setShowErr(json.error.map((item: any) => item.msg));
-      } else {
-        setShowErr([json.error.msg]);
+        // Redirect user to home page
+        navigate("/");
       }
+
+      if (json.error) {
+        if (Array.isArray(json.error)) {
+          setShowErr(json.error.map((item: any) => item.msg));
+        } else {
+          setShowErr([json.error.msg || json.error]);
+        }
+      }
+    } catch (error) {
+      console.log(error);
+      setShowErr(["Something went wrong..."]);
     }
   };
   return (

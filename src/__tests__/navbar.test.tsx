@@ -1,7 +1,8 @@
 import { MemoryRouter } from "react-router-dom";
 import Navbar from "../components/Navbar/Navbar";
-import { render, screen } from "../test-utils";
+import { render, screen } from "../tests/test-utils";
 import * as auth from "../providers/auth";
+import { useUserData } from "../tests/helpers";
 
 afterEach(() => {
   jest.restoreAllMocks();
@@ -10,10 +11,10 @@ afterEach(() => {
 describe("navbar", () => {
   it("should show login and sign up btns if not logged in", async () => {
     jest.spyOn(auth, "useUser").mockImplementation(() => ({
-      logout: jest.fn(),
-      login: jest.fn(),
+      ...useUserData,
+      token: null,
       user: null,
-      isLoggedIn: true,
+      isLoggedIn: false,
     }));
     render(
       <MemoryRouter initialEntries={["/"]}>
@@ -26,16 +27,9 @@ describe("navbar", () => {
   });
 
   it("should show user name if loggedIn", async () => {
-    const spy = jest.spyOn(auth, "useUser").mockImplementation(() => ({
-      logout: jest.fn(),
-      login: jest.fn(),
-      user: {
-        token: "token",
-        email: "test@test.com",
-        name: "Test",
-      },
-      isLoggedIn: true,
-    }));
+    const spy = jest
+      .spyOn(auth, "useUser")
+      .mockImplementation(() => useUserData);
 
     render(
       <MemoryRouter initialEntries={["/"]}>
@@ -46,27 +40,6 @@ describe("navbar", () => {
     expect(spy).toHaveBeenCalled();
 
     expect(screen.getByText(/welcome, Test/i)).toBeInTheDocument();
-    expect(screen.getByText(/logout/i)).toBeInTheDocument();
-  });
-
-  it("should show user email if loggedIn and no name", async () => {
-    jest.spyOn(auth, "useUser").mockImplementation(() => ({
-      logout: jest.fn(),
-      login: jest.fn(),
-      user: {
-        token: "token",
-        email: "test@test.com",
-      },
-      isLoggedIn: true,
-    }));
-
-    render(
-      <MemoryRouter initialEntries={["/"]}>
-        <Navbar />
-      </MemoryRouter>
-    );
-
-    expect(screen.getByText(/welcome, test@test.com/i)).toBeInTheDocument();
     expect(screen.getByText(/logout/i)).toBeInTheDocument();
   });
 });

@@ -1,8 +1,9 @@
-import { render, screen, fireEvent } from "../test-utils";
+import { render, screen, fireEvent } from "../tests/test-utils";
 import userEvent from "@testing-library/user-event";
 import * as auth from "../providers/auth";
 import ReviewForm from "../components/reviews/ReviewForm";
 import doctors from "./doctors.json";
+import { useUserData } from "../tests/helpers";
 
 afterEach(() => {
   jest.restoreAllMocks();
@@ -11,15 +12,7 @@ afterEach(() => {
 describe("reviews", () => {
   it("should submit review form with the right data", async () => {
     const user = userEvent.setup();
-    jest.spyOn(auth, "useUser").mockImplementation(() => ({
-      logout: jest.fn(),
-      login: jest.fn(),
-      user: {
-        token: "token",
-        email: "test@test.com",
-      },
-      isLoggedIn: true,
-    }));
+    jest.spyOn(auth, "useUser").mockImplementation(() => useUserData);
 
     const doctor = doctors[0];
 
@@ -40,7 +33,7 @@ describe("reviews", () => {
     expect(submitCb).toHaveBeenCalledWith({
       doctor,
       review: {
-        userName: "Anonym",
+        userName: "Test",
         content: "",
         rating: 5,
       },

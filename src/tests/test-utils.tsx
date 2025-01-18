@@ -1,6 +1,6 @@
-import { NotificationsProvider } from "./providers/notifications";
-import { AppointmentsProvider } from "./providers/appointments";
-import { AuthProvider } from "./providers/auth";
+import { NotificationsProvider } from "../providers/notifications";
+import { AppointmentsProvider } from "../providers/appointments";
+import { AuthProvider } from "../providers/auth";
 import React, { ReactElement } from "react";
 import { render, RenderOptions } from "@testing-library/react";
 

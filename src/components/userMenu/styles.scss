@@ -18,16 +18,20 @@
   }
 }
 
-.notifications-popup {
+.popup-content-wrapper {
   padding: 10px;
+
+  .link {
+    color: var(--primary-800);
+  }
 }
 
-.notification-popup-content.popup-content[role="tooltip"] {
+.user-menu-popup-content.popup-content[role="tooltip"] {
   width: auto;
 }
 
 .notification {
-  padding: 10px 5px;
+  padding: 10px 0;
   border-bottom: 1px solid var(--neutral-light);
 
   span {

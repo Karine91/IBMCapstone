@@ -5,6 +5,7 @@ import SignUp from "./components/SignUp/SignUp";
 import Login from "./components/Login/Login";
 import ReviewsList from "./components/reviews/ReviewsList";
 import InstantConsultation from "./components/InstantConsultationBooking/InstantConsultation";
+import ProfileCard from "./components/profile/ProfileCard";
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { AuthProvider } from "./providers/auth";
@@ -40,6 +41,10 @@ const router = createBrowserRouter([
       {
         path: "/reviews",
         element: <ReviewsList />,
+      },
+      {
+        path: "/profile",
+        element: <ProfileCard />,
       },
     ],
   },

@@ -4,9 +4,9 @@ import "./styles.scss";
 import InputField from "../form/InputField";
 import { validation } from "../form/validation";
 import { Link, useNavigate } from "react-router-dom";
-import { API_URL } from "../../config";
 import { useState } from "react";
 import { useUser } from "../../providers/auth";
+import { fetchProfile, login as loginRequest } from "../../api/auth";
 
 type Inputs = {
   email: string;
@@ -23,30 +23,18 @@ const Login = () => {
   const navigate = useNavigate();
 
   const [showErr, setShowErr] = useState<string[]>([]);
-  const { login } = useUser();
+  const { saveToken, setProfile } = useUser();
 
   const { required } = validation;
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     const { email, password } = data;
     try {
-      const response = await fetch(`${API_URL}/api/auth/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email,
-          password,
-        }),
-      });
-
-      const json = await response.json();
+      const json = await loginRequest({ email, password });
       if (json.authtoken) {
         // Store user data in session storage
-        login({
-          token: json.authtoken,
-          email,
-        });
+        saveToken(json.authtoken);
+        const userData = await fetchProfile(email, json.authtoken);
+        setProfile(userData);
 
         // Redirect user to home page
         navigate("/");

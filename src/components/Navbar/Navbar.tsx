@@ -5,7 +5,7 @@ import { useUser } from "../../providers/auth";
 import UserMenu from "../userMenu/UserMenu";
 
 const Navbar = ({ variant = "dark" }: { variant?: "dark" | "light" }) => {
-  const { user, logout } = useUser();
+  const { isLoggedIn, logout } = useUser();
 
   return (
     <nav data-variant={variant} className="navbar">
@@ -28,7 +28,7 @@ const Navbar = ({ variant = "dark" }: { variant?: "dark" | "light" }) => {
             <Link to="/reviews">Reviews</Link>
           </li>
         </ul>
-        {user ? (
+        {isLoggedIn ? (
           <>
             <UserMenu />
             <button onClick={logout} className="btn">

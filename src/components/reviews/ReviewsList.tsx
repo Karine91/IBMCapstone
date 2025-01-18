@@ -5,6 +5,7 @@ import DoctorDetails from "../InstantConsultationBooking/DoctorCardIC/DoctorDeta
 import ReviewForm from "./ReviewForm";
 
 import "./styles.scss";
+import { useUser } from "../../providers/auth";
 
 const visitedDoctorsData = [
   {
@@ -34,6 +35,8 @@ const ReviewsList = () => {
   const [visitedDoctors, setVisitedDoctors] =
     useState<ReviewedDoctor[]>(visitedDoctorsData);
 
+  const { isLoggedIn } = useUser();
+
   const handleSubmitReview = (data: ReviewedDoctor) => {
     setVisitedDoctors((state) => {
       const _state = state.filter(
@@ -42,27 +45,32 @@ const ReviewsList = () => {
       return [..._state, data];
     });
   };
+
   return (
     <div>
       <h1>Reviews</h1>
-      <div className="reviews">
-        {visitedDoctors.map((item, ind) => (
-          <div className="review-item" key={ind}>
-            <DoctorDetails {...item.doctor} />
-            {item.review ? (
-              <div>
-                <p>{item.review.content}</p>
-                <span>- {item.review.userName}</span>
-              </div>
-            ) : (
-              <ReviewForm
-                onSubmitCb={handleSubmitReview}
-                doctor={item.doctor}
-              />
-            )}
-          </div>
-        ))}
-      </div>
+      {isLoggedIn ? (
+        <div className="reviews">
+          {visitedDoctors.map((item, ind) => (
+            <div className="review-item" key={ind}>
+              <DoctorDetails {...item.doctor} />
+              {item.review ? (
+                <div>
+                  <p>{item.review.content}</p>
+                  <span>- {item.review.userName}</span>
+                </div>
+              ) : (
+                <ReviewForm
+                  onSubmitCb={handleSubmitReview}
+                  doctor={item.doctor}
+                />
+              )}
+            </div>
+          ))}
+        </div>
+      ) : (
+        <p>To left review please login.</p>
+      )}
     </div>
   );
 };

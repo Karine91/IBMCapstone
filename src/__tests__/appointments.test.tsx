@@ -2,13 +2,14 @@
 import InstantConsultation from "../components/InstantConsultationBooking/InstantConsultation";
 import { http, HttpResponse } from "msw";
 import { setupServer } from "msw/node";
-import { render, screen, fireEvent, within } from "../test-utils";
+import { render, screen, fireEvent, within } from "../tests/test-utils";
 import MainRoot from "../layouts/MainRoot";
 import doctors from "./doctors.json";
 import { MemoryRouter, Routes, Route } from "react-router";
 import * as router from "react-router-dom";
 import userEvent from "@testing-library/user-event";
 import * as auth from "../providers/auth";
+import { useUserData } from "../tests/helpers";
 
 const server = setupServer(
   http.get("https://api.npoint.io/9a5543d36f1460da2f63", () => {
@@ -71,15 +72,7 @@ describe("appointments", () => {
         { get: (s: string) => spec } as URLSearchParams,
         jest.fn(),
       ]);
-    jest.spyOn(auth, "useUser").mockImplementation(() => ({
-      logout: jest.fn(),
-      login: jest.fn(),
-      user: {
-        token: "token",
-        email: "test@test.com",
-      },
-      isLoggedIn: true,
-    }));
+    jest.spyOn(auth, "useUser").mockImplementation(() => useUserData);
 
     render(
       <MemoryRouter initialEntries={["/instant-consultation"]}>
@@ -118,7 +111,7 @@ describe("appointments", () => {
 
     const userMenu = screen.getByTestId("userMenu");
 
-    const popup = await screen.findByTestId("notificationsPopup");
+    const popup = await screen.findByTestId("userMenuPopup");
 
     within(popup).getByText(/karine/i);
     within(popup).getByText(/2024-01-03/i);

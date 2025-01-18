@@ -12,29 +12,43 @@ AuthContext.displayName = "AuthContext";
 
 export type AuthContextValue = {
   logout: () => void;
-  login: (data: User) => void;
+  saveToken: (token: string) => void;
   user: User | null;
+  token: string | null;
   isLoggedIn: boolean;
+  setProfile: (user: User | null) => void;
 };
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUserData] = React.useState<User | null>(getUserData);
+  const [token, setToken] = React.useState<string | null>(
+    sessionStorage.getItem("authToken")
+  );
 
   const logout = () => {
     sessionStorage.removeItem("userData");
+    sessionStorage.removeItem("authToken");
+    setToken(null);
     setUserData(null);
   };
 
-  const login = (data: User) => {
-    sessionStorage.setItem("userData", JSON.stringify(data));
-    setUserData(data);
+  const saveToken = (token: string) => {
+    sessionStorage.setItem("authToken", token);
+    setToken(token);
+  };
+
+  const setProfile = (user: User | null) => {
+    sessionStorage.setItem("userData", JSON.stringify(user));
+    setUserData(user);
   };
 
   const value: AuthContextValue = {
     logout,
-    login,
+    saveToken,
     user,
-    isLoggedIn: Boolean(user),
+    token,
+    isLoggedIn: Boolean(token),
+    setProfile,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
