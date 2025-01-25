@@ -6,7 +6,7 @@ import InputField from "../form/InputField";
 import { validation } from "../form/validation";
 import { Link } from "react-router-dom";
 import { useUser } from "../../providers/auth";
-import { signup, fetchProfile } from "../../api/auth";
+import { signup, fetchProfile } from "../../api";
 
 type Inputs = {
   role: string;

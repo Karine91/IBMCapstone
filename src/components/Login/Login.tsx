@@ -6,7 +6,7 @@ import { validation } from "../form/validation";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useUser } from "../../providers/auth";
-import { fetchProfile, login as loginRequest } from "../../api/auth";
+import { fetchProfile, login as loginRequest } from "../../api";
 
 type Inputs = {
   email: string;

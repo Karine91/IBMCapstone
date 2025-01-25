@@ -44,18 +44,3 @@ export const signup = async ({ name, email, phone, password }: SignUpProps) => {
 
   return response.json();
 };
-
-export const fetchProfile = async (email: string, token: string) => {
-  const response = await fetch(`${API_URL}/api/auth/user`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-      Email: email, // Add the email to the headers
-    },
-  });
-
-  if (response.ok) {
-    return await response.json();
-  } else {
-    throw new Error("Failed to fetch user profile");
-  }
-};
