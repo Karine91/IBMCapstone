@@ -51,13 +51,18 @@ const UserMenu = () => {
         position="bottom center"
       >
         <div className="popup-content-wrapper">
-          <Link
-            to="/profile"
-            className="link"
+          <div
+            className="userProfile-links"
             onClick={() => ref.current?.close()}
           >
-            My Profile
-          </Link>
+            <Link to="/profile" className="link">
+              My Profile
+            </Link>
+            <Link to="/reports" className="link">
+              My Reports
+            </Link>
+          </div>
+
           {notifications.length ? <hr /> : null}
           <div className="notifications" data-testid="userMenuPopup">
             {notifications.reverse().map((item, ind) => (

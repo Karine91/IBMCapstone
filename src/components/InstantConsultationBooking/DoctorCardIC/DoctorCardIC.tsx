@@ -7,7 +7,7 @@ import AppointmentFormIC, {
 } from "../AppointmentFormIC/AppointmentFormIC";
 import { v4 as uuidv4 } from "uuid";
 import { IDoctor, Appointment, SelectOptions } from "../../../types";
-import DoctorDetails from "./DoctorDetails";
+import DoctorDetails from "../../doctors/DoctorDetails";
 import BookedAppointment from "./BookedAppointment";
 import { MdClose } from "react-icons/md";
 import clsx from "clsx";

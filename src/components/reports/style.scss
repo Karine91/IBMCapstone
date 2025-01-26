@@ -1,0 +1,25 @@
+.reports {
+  width: 100%;
+  overflow-x: auto;
+  table {
+    border-spacing: 0;
+    width: 100%;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  th {
+    background: var(--primary-700);
+    color: white;
+    padding: 20px;
+  }
+
+  td {
+    padding: 5px 15px;
+    border-bottom: 1px solid var(--neutral-dark);
+    background-color: white;
+  }
+
+  tr:first-child td {
+    padding-top: 12px;
+  }
+}

@@ -6,11 +6,13 @@ import Login from "./components/Login/Login";
 import ReviewsList from "./components/reviews/ReviewsList";
 import InstantConsultation from "./components/InstantConsultationBooking/InstantConsultation";
 import ProfileCard from "./components/profile/ProfileCard";
+import Reports from "./components/reports/Reports";
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { AuthProvider } from "./providers/auth";
 import { AppointmentsProvider } from "./providers/appointments";
 import { NotificationsProvider } from "./providers/notifications";
+import ProtectedRoutes from "./routes/ProtectedRoutes";
 
 const router = createBrowserRouter([
   {
@@ -43,8 +45,17 @@ const router = createBrowserRouter([
         element: <ReviewsList />,
       },
       {
-        path: "/profile",
-        element: <ProfileCard />,
+        element: <ProtectedRoutes />,
+        children: [
+          {
+            path: "/profile",
+            element: <ProfileCard />,
+          },
+          {
+            path: "/reports",
+            element: <Reports />,
+          },
+        ],
       },
     ],
   },

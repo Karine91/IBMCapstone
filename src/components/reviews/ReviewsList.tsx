@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { ReviewedDoctor } from "../../types";
-import DoctorDetails from "../InstantConsultationBooking/DoctorCardIC/DoctorDetails";
+import DoctorDetails from "../doctors/DoctorDetails";
 
 import ReviewForm from "./ReviewForm";
 

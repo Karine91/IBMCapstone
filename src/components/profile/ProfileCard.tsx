@@ -5,7 +5,6 @@ import InputField from "../form/InputField";
 import { validation } from "../form/validation";
 import { useUser } from "../../providers/auth";
 import { updateProfile } from "../../api";
-import { User } from "../../types";
 
 type Inputs = {
   name: string;

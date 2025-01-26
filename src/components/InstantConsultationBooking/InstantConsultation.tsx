@@ -1,14 +1,16 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import "./InstantConsultation.css";
 import { useSearchParams } from "react-router-dom";
 import FindDoctorSearchIC from "./FindDoctorSearchIC/FindDoctorSearchIC";
 import DoctorCardIC from "./DoctorCardIC/DoctorCardIC";
-import { IDoctor } from "../../types";
+
+import { useDoctors } from "../doctors/hooks/useDoctors";
 
 const InstantConsultation = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [doctors, setDoctors] = useState<IDoctor[]>([]);
+
   const [searchText, setSearchText] = useState("");
+  const doctors = useDoctors([searchParams]);
 
   const speciality = searchParams.get("speciality");
   const filteredDoctors =
@@ -26,25 +28,9 @@ const InstantConsultation = () => {
         })
       : doctors;
 
-  const getDoctorsDetails = () => {
-    fetch("https://api.npoint.io/9a5543d36f1460da2f63")
-      .then((res) => res.json())
-      .then((data: IDoctor[]) => {
-        setDoctors(data);
-      })
-      .catch((err) => console.log(err));
-  };
   const handleSearch = (searchText: string) => {
     setSearchText(searchText);
   };
-  //const navigate = useNavigate();
-  useEffect(() => {
-    getDoctorsDetails();
-    // const authtoken = sessionStorage.getItem("auth-token");
-    // if (!authtoken) {
-    //     navigate("/login");
-    // }
-  }, [searchParams]);
 
   const handleSetSpeciality = (speciality: string) => {
     setSearchParams({ speciality });

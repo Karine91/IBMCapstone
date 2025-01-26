@@ -19,8 +19,6 @@
 }
 
 .popup-content-wrapper {
-  padding: 10px;
-
   .link {
     color: var(--primary-800);
   }
@@ -28,10 +26,11 @@
 
 .user-menu-popup-content.popup-content[role="tooltip"] {
   width: auto;
+  padding: 0;
 }
 
 .notification {
-  padding: 10px 0;
+  padding: 10px;
   border-bottom: 1px solid var(--neutral-light);
 
   span {
@@ -41,5 +40,19 @@
 
   &:last-child {
     border: none;
+  }
+}
+
+.userProfile-links {
+  display: flex;
+  flex-direction: column;
+
+  .link {
+    padding: 10px;
+    transition: all ease 0.3s;
+
+    &:hover {
+      background-color: var(--primary-50);
+    }
   }
 }
