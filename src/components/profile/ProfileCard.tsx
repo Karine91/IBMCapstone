@@ -50,7 +50,11 @@ const ProfileCard = () => {
 
   return (
     <div className="profile-container">
-      <form className="form" onSubmit={handleSubmit(onSubmit)}>
+      <form
+        data-testid="user-profile-form"
+        className="form"
+        onSubmit={handleSubmit(onSubmit)}
+      >
         <h1 className="form-header">Profile</h1>
         <InputField
           register={register("name", { required })}

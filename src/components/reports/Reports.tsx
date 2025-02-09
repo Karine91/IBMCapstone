@@ -20,22 +20,36 @@ const Reports = () => {
         {doctors.length ? (
           <table>
             <thead>
-              {columns.map((item, ind) => (
-                <th key={ind}>{item}</th>
-              ))}
+              <tr>
+                {columns.map((item, ind) => (
+                  <th key={ind}>{item}</th>
+                ))}
+              </tr>
             </thead>
             <tbody>
               {doctors.map((doctor, ind) => {
                 return (
-                  <tr>
+                  <tr key={ind}>
                     <td>{ind + 1}</td>
                     <td>{doctor.name}</td>
                     <td>{doctor.speciality}</td>
                     <td align="right">
-                      <button className="btn">View Report</button>
+                      <a
+                        href="/reports/patient_report.pdf"
+                        target="_blank"
+                        className="btn"
+                      >
+                        View Report
+                      </a>
                     </td>
                     <td align="right">
-                      <button className="btn">Download Report</button>
+                      <a
+                        href=""
+                        download="/reports/patient_report.pdf"
+                        className="btn"
+                      >
+                        Download Report
+                      </a>
                     </td>
                   </tr>
                 );

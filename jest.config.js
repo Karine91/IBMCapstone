@@ -1,10 +1,13 @@
 /** @type {import('ts-jest').JestConfigWithTsJest} **/
-
+import { createDefaultPreset } from "ts-jest";
 export default {
-  preset: "ts-jest",
+  ...createDefaultPreset(),
   modulePaths: ["<rootDir>"],
   transform: {
-    "^.+.tsx?$": ["ts-jest", {}],
+    "^.+.tsx?$": [
+      "ts-jest",
+      { isolatedModules: true, tsconfig: "tsconfig.test.json" },
+    ],
   },
   testEnvironment: "jest-fixed-jsdom",
   setupFilesAfterEnv: ["<rootDir>/src/tests/setupTests.ts"],
